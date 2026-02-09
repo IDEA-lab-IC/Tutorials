@@ -95,6 +95,7 @@ def iterate_topology_stress(state, params):
     sigma_yield = state['sigma_yield']   # normalization
     sigma_limit = state['sigma_limit']   # constraint
     p_norm = state['p_norm']
+    additional_stress_scale_factor = 1000
 
     # --- FE solve ---
     sK = ((KE.flatten()[np.newaxis]).T * (Emin + xPhys**penal*(Emax-Emin))).flatten(order='F')
@@ -160,7 +161,7 @@ def iterate_topology_stress(state, params):
                                  (2*sy - sx)/(2*vm*sigma_yield),
                                  3*txy/(vm*sigma_yield)])
             dvm_dx = dvm_dsig @ dsig_dx
-            dc2[e] = prefactor * (vm**(p_norm-1)) * dvm_dx
+            dc2[e] = prefactor * additional_stress_scale_factor * (vm**(p_norm-1)) * dvm_dx
 
         dc2 = np.asarray(H * (dc2[np.newaxis].T / Hs))[:,0]
         return sigma_vm, p_stress, c2, dc2

@@ -280,6 +280,7 @@ def compute_element_stress_and_von_mises(
     Emax = float(state["Emax"])
     nelx = int(state["nelx"])
     nely = int(state["nely"])
+    density = state['xPhys']
 
     # Plane stress constitutive matrix
     D = (Emax / (1 - nu**2)) * np.array(
@@ -309,9 +310,13 @@ def compute_element_stress_and_von_mises(
 
     for el in range(nel):
         u_e = U[edofMat[el]]          # (8,)
+        rho_e = density[el]
+        E_e = Emin + rho_e**penal*(Emax-Emin)
+
         eps = B @ u_e                 # (3,)
-        sig = D @ eps                 # (3,) -> [sx, sy, txy]
+        sig = E_e * D @ eps                 # (3,) -> [sx, sy, txy]
         sigma_elem[el, :] = sig
+        
 
         sx, sy, txy = sig
         vm = math.sqrt(sx * sx - sx * sy + sy * sy + 3.0 * txy * txy)

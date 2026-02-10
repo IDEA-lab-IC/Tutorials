@@ -282,6 +282,7 @@ def compute_element_stress_and_von_mises(
     nelx = int(state["nelx"])
     nely = int(state["nely"])
     density = state['xPhys']
+    penal = float(state['penal'])
 
     # Plane stress constitutive matrix
     D = (Emax / (1 - nu**2)) * np.array(

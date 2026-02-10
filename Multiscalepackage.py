@@ -278,6 +278,7 @@ def compute_element_stress_and_von_mises(
     edofMat = state["edofMat"]
     nu = float(state["nu"])
     Emax = float(state["Emax"])
+    Emin = float(state['Emin'])
     nelx = int(state["nelx"])
     nely = int(state["nely"])
     density = state['xPhys']
